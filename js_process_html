@@ -1,0 +1,56 @@
+ if(isset($_REQUEST['action']) && $_REQUEST['action']=='process_pay')
+{   
+	$id=$_REQUEST['booster']; 
+	$data=$db->booster($id);
+	$val=$_REQUEST['val'];
+	$row=mysqli_fetch_assoc($data);
+	$balance=$row['confirm_wallet'];
+	$balance_dollar=$row['confirm_wallet_dollar'];
+	$sign_a= $_REQUEST['sign_a'];
+	
+	//$arr = array('balance'=>$balance,'balance_dollar'=>$balance_dollar,'amount'=>$_REQUEST['amount']);
+   // print_r($arr); 	
+   if(($sign_a=='USD' && $_REQUEST['amount']>$balance_dollar) || ($sign_a=='EUR' && $_REQUEST['amount']>$balance)){
+   }
+
+------------------------
+function process_pay(val,booster)
+{
+var sign_a=$('#sign_'+booster).val();
+else
+	{
+		$.ajax({
+			url:"process/process.php?action=process_pay",
+			type:"POST",
+			data:{'val':val,'booster':booster,'amount':amount,sign_a:sign_a},
+			beforeSend:function()
+			{
+				$('#loading').show();
+			},
+			success:function(data)
+			{
+				var data=$.trim(data);
+				$('#loading').hide();
+				if(data=='1')
+				{
+					location.reload();
+					return false;
+				}
+				else 
+				{
+					toastr.error('You can not enter amount more than booster balance.', 'Error!', {timeOut: 5000});
+					return false;
+				}
+				
+			}
+		});
+	}
+}
+}
+
+------------------------	 
+html
+  <select name="name" id="sign_<?php echo $row['id']; ?>">
+					  <option value="EUR">EUR</option>
+					  <option value="USD">USD</option>
+					  </select>
